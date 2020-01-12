@@ -6,6 +6,7 @@ import User from './config/models/User';
 import passport from 'passport';
 import passportHelper from './config/passport';
 import users from './api/users';
+import movies from './api/movies';
 
 const app = express();
 // Bodyparser middleware
@@ -30,6 +31,7 @@ mongoose
 app.use(passport.initialize());
 passportHelper(passport);
 app.use('/api/users', users);
+app.use('/api/movies', movies);
 
 const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
