@@ -1,7 +1,14 @@
 import React from 'react';
+import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 import ListItem from './ListItem';
 
-const List = () => {
+const List = (props) => {
+  const { movies } = props;
+
+  //console.log(movies.movies);
+
+
   return (
     <table className="highlight">
       <thead>
@@ -9,14 +16,27 @@ const List = () => {
           <th>Title</th>
           <th>Genre</th>
           <th>Release year</th>
-          <th>Actions</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <ListItem title="Movie" genre="Thriller" releaseYear="2018"/>
+        {
+          movies.movies.map((movie, index) => {
+            return <ListItem id= {movie._id} key={index} title={movie.title} genre={movie.genre} releaseYear={movie.releaseYear}/>
+          })
+        }
       </tbody>
     </table>
   );
 };
 
-export default List;
+List.propTypes = {
+  movies: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  movies: state.movies
+});
+
+export default connect(mapStateToProps)(List);
