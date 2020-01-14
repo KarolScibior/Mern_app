@@ -32,7 +32,6 @@ export const updateMovie = movieData => dispatch => {
 
 //delete movie
 export const deleteMovie = id => dispatch => {
-  console.log('usuwanko')
   axios.delete(`/api/movies/delete/${id}`)
     .then(res => dispatch({
       type: DELETE_MOVIE,

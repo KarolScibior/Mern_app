@@ -57,7 +57,7 @@ router.post('/create', passport.authenticate('jwt', { session: false }),
     });
 
     await newMovie.save()
-      .then(movie => req.json(movie))
+      .then(movie => res.json(movie))
       .catch(err => console.log(err));
   }
 );
