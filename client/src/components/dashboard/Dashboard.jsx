@@ -5,15 +5,43 @@ import { logoutUser } from "../../actions/authActions";
 import { createMovie } from '../../actions/moviesActions';
 import List from './list/List';
 import { getMovies } from '../../actions/moviesActions';
-
+import Preloader from '../layout/Preloader';
 
 const Dashboard = (props) => {
   const { user } = props.auth;
   const [isHidden, setIsHidden] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { movies } = props;
 
   useEffect(() => {
     props.getMovies();
-  })
+  }, []);
+
+  /* useEffect(() => {
+    setIsHidden(!isHidden);
+  }, [movies.movie]) */
+
+  const validateMovie = (title, genre, year) => {
+    if (title === '' || genre === '' || year === '') {
+      setErrorMessage('There can be no empty spaces!');
+      setIsError(true);
+      return false;
+    } else {
+      if (!/^[a-zA-Z]{4,10}$/.test(genre)) {
+        setErrorMessage('Genre is wrong!');
+        setIsError(true);
+        return false;
+      };
+      if (!/^\d{4}$/.test(year)) {
+        setErrorMessage('Year is wrong!');
+        setIsError(true);
+        return false;
+      }
+      setIsError(false);
+      return true;
+    }
+  };
 
   const onLogoutClick = e => {
     e.preventDefault();
@@ -29,13 +57,20 @@ const Dashboard = (props) => {
 
     e.preventDefault();
 
-
-    props.createMovie(newMovie);
-    setIsHidden(!isHidden);
+    if (validateMovie(newMovie.title, newMovie.genre, newMovie.releaseYear)) {
+      props.createMovie(newMovie);
+      props.getMovies();
+      setIsHidden(!isHidden);
+      setIsError(false);
+    }
   }
 
   return (
-    <div style={{ height: "75vh" }} className="container valign-wrapper">
+    <>
+    {
+      (movies.movieLoading || movies.moviesLoading) && <Preloader/>
+    }
+    <div className="container valign-wrapper">
       <div className="row">
         <div className="col s12 center-align">
           <h4>
@@ -75,47 +110,34 @@ const Dashboard = (props) => {
           isHidden && (
             <div
               style={{
-                marginTop: '80px'
+                marginTop: '40px'
               }}
               className="col s12 center-align"
             >
+              {
+                isError && (
+                  <h4 style={{ color: 'red', marginTop: '40px' }}>{errorMessage}</h4>
+                )
+              }
               <form noValidate onSubmit={onSubmit}>
                 <div className="input-field col s12">
                   <input
-                    //onChange={this.onChange}
-                    //value={this.state.name}
-                    //error={errors.name}
                     id="title"
                     type="text"
-                    //className={classnames("", {
-                    // invalid: errors.name
-                    //})}
                   />
                   <label htmlFor="title">Title</label>
                 </div>
                 <div className="input-field col s12">
                   <input
-                    //onChange={this.onChange}
-                    //value={this.state.email}
-                    //error={errors.email}
                     id="genre"
                     type="text"
-                    //className={classnames("", {
-                    //  invalid: errors.email
-                    //})}
                   />
                   <label htmlFor="genre">Genre</label>
                 </div>
                 <div className="input-field col s12">
                   <input
-                    //onChange={this.onChange}
-                    //value={this.state.password}
-                    //error={errors.password}
                     id="releaseYear"
                     type="text"
-                    //className={classnames("", {
-                    //  invalid: errors.password
-                    //})}
                   />
                   <label htmlFor="releaseYear">Release year</label>
                 </div>
@@ -141,6 +163,7 @@ const Dashboard = (props) => {
 
 
     </div>
+    </>
   );
 }
 
@@ -148,11 +171,13 @@ Dashboard.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   createMovie: PropTypes.func.isRequired,
-  getMovies: PropTypes.func.isRequired
+  getMovies: PropTypes.func.isRequired,
+  movies: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  movies: state.movies
 });
 
 export default connect(

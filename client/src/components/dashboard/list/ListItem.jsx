@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { deleteMovie } from '../../../actions/moviesActions';
+import { deleteMovie, getMovie } from '../../../actions/moviesActions';
 
 const ListItem = (props) => {
   const { id, title, genre, releaseYear } = props;
 
   const onEdit = () => {
-    console.log(id);
+    props.getMovie(id);
   }
 
   const onDelete = () => {
@@ -28,12 +28,14 @@ const ListItem = (props) => {
     </tr>
   );
 };
+
 const mapStateToProps = state => ({
 
 });
 
 ListItem.propTypes = {
-  delteMovie: PropTypes.func.isRequired
+  deleteMovie: PropTypes.func.isRequired,
+  getMovie: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { deleteMovie })(ListItem);
+export default connect(mapStateToProps, { deleteMovie, getMovie })(ListItem);

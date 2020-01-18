@@ -10,7 +10,7 @@ import {
 
 const initialState = {
   movies: [],
-  movie: [],
+  movie: {},
   movieLoading: false,
   moviesLoading: false
 };

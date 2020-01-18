@@ -56,7 +56,6 @@ export const getMovie = id => dispatch => {
 
 //get all movies for user
 export const getMovies = () => dispatch => {
-  console.log('e');
   dispatch(setMoviesLoading());
   axios.get('/api/movies/')
     .then(res => dispatch({
