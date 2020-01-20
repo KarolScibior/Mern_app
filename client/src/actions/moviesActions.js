@@ -24,9 +24,10 @@ export const createMovie = movieData => dispatch => {
 export const updateMovie = movieData => dispatch => {
   axios.patch('/api/movies/update', movieData)
     .then(res => dispatch({
-      type: UPDATE_MOVIE,
-      payload: res.data
-    }))
+        type: UPDATE_MOVIE,
+        payload: res.config.data
+      })
+    )
     .catch(err => console.log(err));
 };
 

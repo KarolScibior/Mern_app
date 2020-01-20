@@ -16,6 +16,7 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     props.getMovies();
+    // eslint-disable-next-line
   }, []);
 
   /* useEffect(() => {

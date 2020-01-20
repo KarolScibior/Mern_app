@@ -9,7 +9,7 @@ import users from './api/users';
 import movies from './api/movies';
 
 const app = express();
-// Bodyparser middleware
+
 app.use(
   bodyParser.urlencoded({
     extended: false
@@ -33,5 +33,5 @@ passportHelper(passport);
 app.use('/api/users', users);
 app.use('/api/movies', movies);
 
-const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

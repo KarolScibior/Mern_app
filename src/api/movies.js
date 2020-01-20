@@ -72,7 +72,7 @@ router.patch('/update', passport.authenticate('jwt', { session: false }),
     };
 
     await Movie.findOneAndUpdate(
-      { _id: req.body.id },
+      { _id: req.body._id },
       { $set: movieFields },
       { new: true }
     )
